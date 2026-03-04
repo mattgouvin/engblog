@@ -1,0 +1,23 @@
+{
+  "name": "engineering-blog-discovery",
+  "module": "src/index.ts",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "engblog": "src/index.ts"
+  },
+  "scripts": {
+    "list-articles": "bun run src/index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "playwright": "^1.58.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^5.4.1",
+    "node-html-parser": "^7.0.2"
+  }
+}
