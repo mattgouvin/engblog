@@ -32,6 +32,7 @@ export const providerRegistry: Record<Company, DataProvider> = {
   [Company.Spotify]: new RssProvider("https://engineering.atspotify.com/feed"),
   [Company.Tinder]: new RssProvider("https://medium.com/feed/tinder"),
   [Company.YCombinator]: new RssProvider("https://www.ycombinator.com/blog/feed"),
+  [Company.OpenAI]: new RssProvider("https://openai.com/news/rss.xml"),
 
   // Browser-based providers (require JavaScript rendering)
   [Company.Anthropic]: new BrowserProvider(

@@ -26,6 +26,7 @@ export enum Company {
   Spotify = "spotify",
   InstaCart = "instacart",
   Tinder = "tinder",
+  OpenAI = "openai",
 }
 
 export interface ArticleData {
