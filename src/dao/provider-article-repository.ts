@@ -66,10 +66,8 @@ export class ProviderArticleRepository implements ArticleRepository {
     filters: ContentFilterIdentifier[]
   ): Article[] {
     if (filters.length === 0) return articles;
-
-    return articles.filter((article) =>
-      filters.some((filter) => this.matchesFilter(article, filter))
-    );
+    const impls = filters.map((f) => filterRegistry[f]).filter(Boolean);
+    return articles.filter((article) => impls.some((f) => f.matches(article)));
   }
 
   private applyExcludeFilters(
@@ -77,15 +75,8 @@ export class ProviderArticleRepository implements ArticleRepository {
     filters: ContentFilterIdentifier[]
   ): Article[] {
     if (filters.length === 0) return articles;
-
-    return articles.filter(
-      (article) => !filters.some((filter) => this.matchesFilter(article, filter))
-    );
-  }
-
-  private matchesFilter(article: Article, filter: ContentFilterIdentifier): boolean {
-    const filterImpl = filterRegistry[filter];
-    return filterImpl ? filterImpl.matches(article) : false;
+    const impls = filters.map((f) => filterRegistry[f]).filter(Boolean);
+    return articles.filter((article) => !impls.some((f) => f.matches(article)));
   }
 
   private sortArticles(articles: Article[]): Article[] {

@@ -18,10 +18,13 @@ export class CompaniesFlag implements FlagProcessor<Company[]> {
       process.exit(1);
     }
 
-    const valid = slugs.filter((s): s is Company =>
-      ALL_COMPANIES.includes(s as Company)
-    );
-    const invalid = slugs.filter((s) => !ALL_COMPANIES.includes(s as Company));
+    const companySet = new Set<string>(ALL_COMPANIES);
+    const valid: Company[] = [];
+    const invalid: string[] = [];
+    for (const s of slugs) {
+      if (companySet.has(s)) valid.push(s as Company);
+      else invalid.push(s);
+    }
 
     if (invalid.length > 0) {
       console.error(ERROR_MESSAGES.unknownCompanies(invalid));

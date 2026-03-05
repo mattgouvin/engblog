@@ -1,10 +1,10 @@
 import { XMLParser } from "fast-xml-parser";
 import type { ArticleData } from "../types";
 import type { DataProvider } from "./provider";
-import { BaseProvider } from "./base-provider";
+import { BaseProvider, USER_AGENT } from "./base-provider";
 
 const RSS_HEADERS = {
-  "User-Agent": "engblog/1.0",
+  "User-Agent": USER_AGENT,
   Accept: "application/rss+xml, application/atom+xml, application/xml, text/xml",
 } as const;
 
@@ -42,20 +42,17 @@ function extractLink(item: Record<string, unknown>): string | null {
     const linkObj = link as Record<string, unknown>;
     if (typeof linkObj["@_href"] === "string") return linkObj["@_href"].trim() || null;
     const links = Array.isArray(link) ? link : [];
+    let fallback: string | null = null;
     for (const l of links) {
       if (typeof l === "object" && l !== null) {
         const lo = l as Record<string, unknown>;
-        if (lo["@_rel"] === "alternate" && typeof lo["@_href"] === "string") {
-          return (lo["@_href"] as string).trim();
+        if (typeof lo["@_href"] === "string") {
+          if (lo["@_rel"] === "alternate") return (lo["@_href"] as string).trim();
+          if (!fallback) fallback = (lo["@_href"] as string).trim();
         }
       }
     }
-    for (const l of links) {
-      if (typeof l === "object" && l !== null) {
-        const lo = l as Record<string, unknown>;
-        if (typeof lo["@_href"] === "string") return (lo["@_href"] as string).trim();
-      }
-    }
+    return fallback;
   }
   return null;
 }

@@ -1,3 +1,5 @@
+export const USER_AGENT = "engblog/1.0";
+
 export abstract class BaseProvider {
   protected resolveUrl(articleUrl: string, baseUrl: string): string {
     if (articleUrl && articleUrl.startsWith("/")) {

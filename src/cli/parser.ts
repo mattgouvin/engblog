@@ -122,15 +122,14 @@ function validateFlags(flags: {
     process.exit(1);
   }
 
-  if ((flags.startDate || flags.endDate) && !flags.startDate && !flags.endDate) {
+  if ((flags.startDate || flags.endDate) && !(flags.startDate && flags.endDate)) {
     console.error(ERROR_MESSAGES.dateRangeIncomplete);
     process.exit(1);
   }
 
   // Validate filter overlap
-  const overlap = flags.includeFilters.filter((f) =>
-    flags.excludeFilters.includes(f)
-  );
+  const excludeSet = new Set(flags.excludeFilters);
+  const overlap = flags.includeFilters.filter((f) => excludeSet.has(f));
   if (overlap.length > 0) {
     console.error(ERROR_MESSAGES.filterOverlap(overlap));
     process.exit(1);

@@ -17,12 +17,8 @@ function getCachePath(company: Company): string {
 
 export async function getCachedArticles(company: Company): Promise<ArticleData[] | null> {
   try {
-    const file = Bun.file(getCachePath(company));
-    if (!(await file.exists())) return null;
-
-    const entry: CacheEntry = await file.json();
+    const entry: CacheEntry = await Bun.file(getCachePath(company)).json();
     if (Date.now() - entry.timestamp >= CACHE_TTL_MS) return null;
-
     return entry.data;
   } catch {
     return null;

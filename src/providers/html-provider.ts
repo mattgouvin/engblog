@@ -1,10 +1,10 @@
 import { parse, type HTMLElement } from "node-html-parser";
 import type { ArticleData, HtmlSelectors } from "../types";
 import type { DataProvider } from "./provider";
-import { BaseProvider } from "./base-provider";
+import { BaseProvider, USER_AGENT } from "./base-provider";
 
 const HTML_HEADERS = {
-  "User-Agent": "engblog/1.0",
+  "User-Agent": USER_AGENT,
   Accept: "text/html",
 } as const;
 
