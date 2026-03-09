@@ -68,7 +68,7 @@ export class RssProvider extends BaseProvider implements DataProvider {
       tls: {
         rejectUnauthorized: false,
       }
-    } as any);
+    });
     if (!res.ok) throw new Error(`HTTP ${res.status} fetching ${this.url}`);
     const xml = await res.text();
     const parsed = parser.parse(xml);

@@ -41,8 +41,8 @@ function parseFlags(args: string[], command: string): ParsedFlags {
   let daysBack: { startDate: Date; endDate: Date } | undefined;
   let startDate: Date | undefined;
   let endDate: Date | undefined;
-  let includeFilters: ContentFilterIdentifier[] = [];
-  let excludeFilters: ContentFilterIdentifier[] = [];
+  const includeFilters: ContentFilterIdentifier[] = [];
+  const excludeFilters: ContentFilterIdentifier[] = [];
   let sources: SourceType[] | undefined;
 
   let i = 0;
