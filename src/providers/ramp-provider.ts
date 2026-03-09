@@ -33,7 +33,7 @@ export class RampProvider extends BaseProvider implements DataProvider {
 
           if (authorDateDiv && "querySelectorAll" in authorDateDiv) {
             // Extract date from the author–Date text
-            const authorDateText = (authorDateDiv as any).text.trim();
+            const authorDateText = (authorDateDiv).text.trim();
             const dashIndex = authorDateText.lastIndexOf("–");
             if (dashIndex !== -1) {
               const dateStr = authorDateText.substring(dashIndex + 1).trim();

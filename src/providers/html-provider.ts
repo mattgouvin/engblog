@@ -29,7 +29,7 @@ export class HtmlProvider extends BaseProvider implements DataProvider {
     const titleElement = element.querySelector(this.selectors.title);
     const title = titleElement?.text.trim() ?? "(no title)";
 
-    let articleUrl = "";
+    let articleUrl;
     if (this.selectors.link === "self") {
       articleUrl = element.getAttribute("href") ?? "";
     } else {

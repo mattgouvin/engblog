@@ -7,17 +7,30 @@
     "engblog": "src/index.ts"
   },
   "scripts": {
+    "clean": "rm -rf dist build node_modules",
+    "lint": "eslint src tst",
+    "build": "bun run clean && bun install && bun run lint && bun build ./src/index.ts --outdir ./build --target=node",
     "list-articles": "bun run src/index.ts"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/bun": "latest",
-    "playwright": "^1.58.2"
+    "chromium-bidi": "^15.0.0",
+    "electron": "^40.8.0",
+    "globals": "^17.4.0",
+    "jiti": "^2.6.1",
+    "playwright": "^1.58.2",
+    "typescript-eslint": "^8.56.1"
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "dependencies": {
+    "eslint": "^10.0.3",
     "fast-xml-parser": "^5.4.1",
     "node-html-parser": "^7.0.2"
+  },
+  "eslintConfig": {
+    "ignorePatterns": ["node_modules/"]
   }
 }

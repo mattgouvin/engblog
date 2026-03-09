@@ -23,7 +23,7 @@ export class AsanaProvider extends BaseProvider implements DataProvider {
 
       imgs.forEach((img) => {
         const alt = img.getAttribute("alt") || "";
-        let parent: any = img;
+        let parent = img;
         let href = "";
         let date = "";
 
