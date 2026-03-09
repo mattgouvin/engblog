@@ -1,5 +1,6 @@
 import type { Company } from "./index";
-import type { ContentFilterIdentifier } from "../cli/filters";
+import type { ContentFilterIdentifier } from "../constants/filters";
+import type { SourceType } from "../constants/sources";
 
 export interface ParsedArgs {
   command: string;
@@ -12,7 +13,7 @@ export interface ParsedFlags {
   endDate?: Date;
   includeFilters: ContentFilterIdentifier[];
   excludeFilters: ContentFilterIdentifier[];
-  noCommunity?: boolean;
+  sources?: SourceType[];
 }
 
 export interface FlagProcessor<T> {

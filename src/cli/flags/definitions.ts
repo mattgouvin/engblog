@@ -15,5 +15,5 @@ export class CliFlag {
   static readonly Include = new CliFlag("--include", "-i");
   static readonly Exclude = new CliFlag("--exclude", "-x");
   static readonly Help = new CliFlag("--help", "-h");
-  static readonly NoCommunity = new CliFlag("--no-community");
+  static readonly Sources = new CliFlag("--sources");
 }

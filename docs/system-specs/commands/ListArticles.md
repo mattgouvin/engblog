@@ -23,8 +23,16 @@ Filter articles by content keywords matched against article titles:
 
 Note: The same filter cannot be used in both `--include` and `--exclude` simultaneously.
 
-**Community Sources** `--no-community` (optional)
-Exclude independent community sources (e.g. Latent Space) from results. By default, independent sources are fetched alongside company blogs.
+**Sources** `--sources` (optional, default: all)
+Filter which source types to include. Accepts one or both of: `companies`, `community`. Omitting this flag fetches from all sources.
+
+- `--sources companies` — fetch only company blogs
+- `--sources community` — fetch only independent sources
+- `--sources companies community` — fetch all (same as default)
+
+Constraints:
+- `--sources community` and `--companies` are mutually exclusive (exits non-zero)
+- Unrecognized values exit non-zero with a list of valid values
 
 **Help** `--help, -h`
 Display usage information and available options.

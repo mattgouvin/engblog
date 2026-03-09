@@ -5,6 +5,7 @@ import { CliFlag } from "./flags/definitions";
 import { ERROR_MESSAGES, HELP_MESSAGES } from "./messages";
 import { VALID_FILTERS, ContentFilterIdentifier } from "../constants/filters";
 import type { ParsedArgs, ParsedFlags } from "../types/cli";
+import { SourceType } from "../constants/sources";
 import { CompaniesFlag } from "./flags/companies";
 import { DaysBackFlag, DateFlag } from "./flags/date";
 import { FilterFlag } from "./flags/filter";
@@ -42,7 +43,7 @@ function parseFlags(args: string[], command: string): ParsedFlags {
   let endDate: Date | undefined;
   let includeFilters: ContentFilterIdentifier[] = [];
   let excludeFilters: ContentFilterIdentifier[] = [];
-  let noCommunity: boolean = false;
+  let sources: SourceType[] | undefined;
 
   let i = 0;
   while (i < args.length) {
@@ -72,9 +73,24 @@ function parseFlags(args: string[], command: string): ParsedFlags {
       const result = excludeProcessor.parse(args, i);
       excludeFilters.push(result.value);
       i = result.nextIndex;
-    } else if (CliFlag.NoCommunity.isFlag(arg)) {
-      noCommunity = true;
-      i++;
+    } else if (CliFlag.Sources.isFlag(arg)) {
+      const values: SourceType[] = [];
+      let j = i + 1;
+      while (j < args.length && !args[j]!.startsWith("-")) {
+        const val = args[j]!;
+        if (val !== SourceType.Companies && val !== SourceType.Community) {
+          console.error(ERROR_MESSAGES.sourcesInvalid);
+          process.exit(1);
+        }
+        values.push(val as SourceType);
+        j++;
+      }
+      if (values.length === 0) {
+        console.error(ERROR_MESSAGES.sourcesInvalid);
+        process.exit(1);
+      }
+      sources = values;
+      i = j;
     } else if (CliFlag.Help.isFlag(arg)) {
       if (command === CliCommand.ListArticles) {
         console.log(HELP_MESSAGES.listArticles(ALL_COMPANIES, VALID_FILTERS));
@@ -96,6 +112,8 @@ function parseFlags(args: string[], command: string): ParsedFlags {
     endDate,
     includeFilters,
     excludeFilters,
+    sources,
+    companies,
   });
 
   // Apply daysBack transformation if provided
@@ -110,7 +128,7 @@ function parseFlags(args: string[], command: string): ParsedFlags {
     endDate,
     includeFilters,
     excludeFilters,
-    noCommunity,
+    sources,
   };
 }
 
@@ -120,7 +138,20 @@ function validateFlags(flags: {
   endDate?: Date;
   includeFilters: ContentFilterIdentifier[];
   excludeFilters: ContentFilterIdentifier[];
+  sources?: SourceType[];
+  companies: Company[];
 }): void {
+  // Validate --sources community + --companies conflict
+  if (
+    flags.sources &&
+    flags.sources.length === 1 &&
+    flags.sources[0] === SourceType.Community &&
+    flags.companies !== ALL_COMPANIES
+  ) {
+    console.error(ERROR_MESSAGES.sourcesCommunityCompaniesConflict);
+    process.exit(1);
+  }
+
   // Validate mutually exclusive date options
   if (flags.daysBack && (flags.startDate || flags.endDate)) {
     console.error(ERROR_MESSAGES.daysBackMutuallyExclusive);
