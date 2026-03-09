@@ -42,6 +42,7 @@ function parseFlags(args: string[], command: string): ParsedFlags {
   let endDate: Date | undefined;
   let includeFilters: ContentFilterIdentifier[] = [];
   let excludeFilters: ContentFilterIdentifier[] = [];
+  let noCommunity: boolean = false;
 
   let i = 0;
   while (i < args.length) {
@@ -71,6 +72,9 @@ function parseFlags(args: string[], command: string): ParsedFlags {
       const result = excludeProcessor.parse(args, i);
       excludeFilters.push(result.value);
       i = result.nextIndex;
+    } else if (CliFlag.NoCommunity.isFlag(arg)) {
+      noCommunity = true;
+      i++;
     } else if (CliFlag.Help.isFlag(arg)) {
       if (command === CliCommand.ListArticles) {
         console.log(HELP_MESSAGES.listArticles(ALL_COMPANIES, VALID_FILTERS));
@@ -106,6 +110,7 @@ function parseFlags(args: string[], command: string): ParsedFlags {
     endDate,
     includeFilters,
     excludeFilters,
+    noCommunity,
   };
 }
 

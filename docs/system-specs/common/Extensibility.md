@@ -1,26 +1,37 @@
 # Extending the System
 
-## Adding Companies
+## Source Types
+
+Three provider types are available for both company and independent sources.
 
 **RSS Feed Sources**
-Most companies are added by configuring an RSS provider with the feed URL. Add the company identifier to the enum, then map it to an RSS provider in the registry.
-- `src/types/index.ts` — add entry to `Company` enum
+Most sources are added by configuring an RSS provider with the feed URL.
 - `src/providers/rss-provider.ts` — RSS provider implementation
-- `src/providers/registry.ts` — map company to provider instance
 
 **Browser-Rendered Sources**
 For sites requiring JavaScript execution, use a browser provider with CSS selectors to extract article data. Configure selectors for article containers, titles, links, and optional publish dates. Requires Playwright and a Chromium installation.
-- `src/types/index.ts` — `HtmlSelectors` interface
+- `src/types/index.ts` — `HtmlSelectors` interface for selector shape
 - `src/providers/browser-provider.ts` — browser provider implementation (uses Playwright/Chromium)
-- `src/providers/registry.ts` — map company to provider instance
 
 **Custom Sources**
 When standard providers don't fit, create a custom provider implementing the base interface. Custom providers handle unique parsing requirements or complex API interactions.
 - `src/providers/base-provider.ts` — base class to extend
 - `src/providers/asana-provider.ts`, `src/providers/ramp-provider.ts` — reference implementations
-- `src/providers/registry.ts` — map company to provider instance
 
-Note: Providers fetch article data without company context. The repository layer assigns company information when data is retrieved.
+Note: Providers fetch article data without source context. The repository layer assigns `source` and `sourceType` automatically when data is retrieved.
+
+## Adding Company Sources
+
+Company blogs are tracked via the `Company` enum and `providerRegistry`.
+- `src/types/index.ts` — add entry to `Company` enum
+- `src/providers/company-registry.ts` — map the new value to a provider instance (see Source Types above)
+
+## Adding Independent Sources
+
+Independent sources (e.g. community blogs, newsletters) are tracked separately from company blogs via the `IndependentSource` enum and `communityRegistry`.
+- `src/types/index.ts` — add entry to `IndependentSource` enum
+- `src/providers/community-registry.ts` — map the new value to a provider instance (see Source Types above); `src/providers/community-registry.ts` itself (with `LatentSpace`) serves as the reference implementation
+- Articles from independent sources are assigned `sourceType: "independent"` automatically by the repository layer.
 
 ## Adding Content Filters
 
@@ -79,4 +90,4 @@ Connect to an internal service API that manages blog data. Translate filter para
 The repository pattern ensures the command layer remains unchanged regardless of the data source.
 - `src/dao/article-repository.ts` — repository interface to implement
 - `src/dao/provider-article-repository.ts` — existing implementation for reference
-- `src/dao/cache.ts` — per-company file cache (1-hour TTL, stored in OS tmpdir); bypass or replace as needed for non-provider-based implementations
+- `src/dao/cache.ts` — per-source file cache keyed by source slug string (1-hour TTL, stored in OS tmpdir); covers both company and independent sources; bypass or replace as needed for non-provider-based implementations

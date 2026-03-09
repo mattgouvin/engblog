@@ -1,7 +1,7 @@
 export class CliFlag {
   constructor(
     public readonly long: string,
-    public readonly short: string,
+    public readonly short?: string,
   ) {}
 
   isFlag(arg: string): boolean {
@@ -15,4 +15,5 @@ export class CliFlag {
   static readonly Include = new CliFlag("--include", "-i");
   static readonly Exclude = new CliFlag("--exclude", "-x");
   static readonly Help = new CliFlag("--help", "-h");
+  static readonly NoCommunity = new CliFlag("--no-community");
 }

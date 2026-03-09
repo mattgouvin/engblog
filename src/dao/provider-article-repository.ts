@@ -1,34 +1,46 @@
 import type { Article, Company } from "../types";
 import type { ArticleRepository, ArticleListFilters } from "./article-repository";
-import { providerRegistry } from "../providers";
+import { providerRegistry, communityRegistry, ALL_INDEPENDENT_SOURCES } from "../providers";
 import { filterRegistry } from "../filters";
 import type { ContentFilterIdentifier } from "../constants/filters";
 import { getCachedArticles, setCachedArticles } from "./cache";
 
 export class ProviderArticleRepository implements ArticleRepository {
   async list(filters: ArticleListFilters): Promise<Article[]> {
-    const articles = await this.fetchArticles(filters.companies);
+    const articles = await this.fetchArticles(filters.companies, filters.noCommunity);
     const filtered = this.filterArticles(articles, filters);
     return this.sortArticles(filtered);
   }
 
-  private async fetchArticles(companies: Company[]): Promise<Article[]> {
-    const results = await Promise.allSettled(
-      companies.map(async (company) => {
-        const cached = await getCachedArticles(company);
-        if (cached) {
-          return cached.map(article => ({ ...article, company }));
-        }
+  private async fetchArticles(companies: Company[], noCommunity?: boolean): Promise<Article[]> {
+    const independentSources = noCommunity ? [] : ALL_INDEPENDENT_SOURCES;
 
-        const articles = await providerRegistry[company].fetch();
-        await setCachedArticles(company, articles);
-        return articles.map(article => ({ ...article, company }));
-      })
-    );
+    const companyPromises: Promise<Article[]>[] = companies.map(async (company): Promise<Article[]> => {
+      const cached = await getCachedArticles(company);
+      if (cached) {
+        return cached.map(article => ({ ...article, source: company, sourceType: "company" as const }));
+      }
+      const articles = await providerRegistry[company].fetch();
+      await setCachedArticles(company, articles);
+      return articles.map(article => ({ ...article, source: company, sourceType: "company" as const }));
+    });
+
+    const independentPromises: Promise<Article[]>[] = independentSources.map(async (source): Promise<Article[]> => {
+      const cached = await getCachedArticles(source);
+      if (cached) {
+        return cached.map(article => ({ ...article, source, sourceType: "independent" as const }));
+      }
+      const articles = await communityRegistry[source].fetch();
+      await setCachedArticles(source, articles);
+      return articles.map(article => ({ ...article, source, sourceType: "independent" as const }));
+    });
+
+    const allSources = [...companies, ...independentSources];
+    const results = await Promise.allSettled([...companyPromises, ...independentPromises]);
 
     return results.flatMap((result, i) => {
       if (result.status === "fulfilled") return result.value;
-      console.error(`Failed to fetch ${companies[i]}: ${result.reason}`);
+      console.error(`Failed to fetch ${allSources[i]}: ${result.reason}`);
       return [];
     });
   }

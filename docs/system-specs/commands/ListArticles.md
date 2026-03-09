@@ -23,16 +23,28 @@ Filter articles by content keywords matched against article titles:
 
 Note: The same filter cannot be used in both `--include` and `--exclude` simultaneously.
 
+**Community Sources** `--no-community` (optional)
+Exclude independent community sources (e.g. Latent Space) from results. By default, independent sources are fetched alongside company blogs.
+
 **Help** `--help, -h`
 Display usage information and available options.
 
+## Filtering Behavior
+
+Articles with a null `publishedAt` are always excluded from results, regardless of whether a date range was specified. This applies to all sources.
+
 ## Output Format
 
-Results are returned as JSON array containing article objects with title, URL, publication date, and source company.
+Results are returned as a JSON array. Each article object contains:
+- `title` — article title
+- `url` — article URL
+- `publishedAt` — publication date (ISO string or null)
+- `source` — slug identifying the source (e.g. `"google"`, `"latentspace"`)
+- `sourceType` — `"company"` or `"independent"`
 
-## Supported Companies
+## Supported Sources
 
-28 tech companies including Google, Meta, Netflix, Stripe, Anthropic, and others.
+28 tech company blogs including Google, Meta, Netflix, Stripe, Anthropic, and others. Independent sources: Latent Space (`latentspace`).
 
 ## Common Use Cases
 

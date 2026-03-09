@@ -29,6 +29,10 @@ export enum Company {
   OpenAI = "openai",
 }
 
+export enum IndependentSource {
+  LatentSpace = "latentspace",
+}
+
 export interface ArticleData {
   title: string;
   url: string;
@@ -36,7 +40,8 @@ export interface ArticleData {
 }
 
 export interface Article extends ArticleData {
-  company: Company;
+  source: string;
+  sourceType: "company" | "independent";
 }
 
 export interface HtmlSelectors {
