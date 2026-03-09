@@ -12,6 +12,7 @@ export interface ParsedFlags {
   endDate?: Date;
   includeFilters: ContentFilterIdentifier[];
   excludeFilters: ContentFilterIdentifier[];
+  noCommunity?: boolean;
 }
 
 export interface FlagProcessor<T> {

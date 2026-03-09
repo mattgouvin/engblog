@@ -7,6 +7,7 @@ export interface ArticleListFilters {
   endDate?: Date;
   includeFilters: ContentFilterIdentifier[];
   excludeFilters: ContentFilterIdentifier[];
+  noCommunity?: boolean;
 }
 
 export interface ArticleRepository {

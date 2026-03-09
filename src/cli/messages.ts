@@ -35,5 +35,6 @@ Global options:
   --include, -i      Include only articles matching filter (can be used multiple times)
                      Valid: ${validFilters.join(", ")}
   --exclude, -x      Exclude articles matching filter (can be used multiple times)
-                     Valid: ${validFilters.join(", ")}`,
+                     Valid: ${validFilters.join(", ")}
+  --no-community     Exclude independent source articles (default: included)`,
 } as const;
