@@ -1,4 +1,4 @@
 export enum SourceType {
   Companies = "companies",
-  Community = "community",
+  Independent = "independent",
 }

@@ -9,7 +9,7 @@ mock.module("../../src/providers", () => ({
         ]),
     },
   },
-  communityRegistry: {
+  independentRegistry: {
     latentspace: {
       fetch: () =>
         Promise.resolve([
@@ -50,7 +50,7 @@ describe("ProviderArticleRepository sources filtering", () => {
 
   // Scenario: Community-only results
   test("sources: ['community'] returns only independent articles", async () => {
-    const articles = await repo.list({ ...BASE_FILTERS, sources: ["community"] });
+    const articles = await repo.list({ ...BASE_FILTERS, sources: ["independent"] });
     expect(articles.length).toBeGreaterThan(0);
     expect(articles.every((a) => a.sourceType === "independent")).toBe(true);
     expect(articles.some((a) => a.sourceType === "company")).toBe(false);
@@ -66,7 +66,7 @@ describe("ProviderArticleRepository sources filtering", () => {
 
   // Scenario: Both sources (equivalent to default)
   test("sources: ['companies', 'community'] returns both company and independent articles", async () => {
-    const articles = await repo.list({ ...BASE_FILTERS, sources: ["companies", "community"] });
+    const articles = await repo.list({ ...BASE_FILTERS, sources: ["companies", "independent"] });
     const types = articles.map((a) => a.sourceType);
     expect(types).toContain("company");
     expect(types).toContain("independent");
@@ -79,7 +79,7 @@ describe("ProviderArticleRepository sources filtering", () => {
 
     const articles = await repo.list({
       ...BASE_FILTERS,
-      sources: ["community"],
+      sources: ["independent"],
       startDate,
       endDate,
       includeFilters: [ContentFilterIdentifier.AI],

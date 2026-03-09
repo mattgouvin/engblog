@@ -14,8 +14,8 @@ export const ERROR_MESSAGES = {
   daysBackMutuallyExclusive: "--daysBack cannot be used together with --startDate or --endDate",
   dateRangeIncomplete: "Both --startDate and --endDate must be provided together",
   unknownFlag: (flag: string) => `Unknown flag: ${flag}`,
-  sourcesInvalid: `--sources values must be one or more of: companies, community`,
-  sourcesCommunityCompaniesConflict: `--sources community and --companies are mutually exclusive`,
+  sourcesInvalid: `--sources values must be one or more of: companies, independent`,
+  sourcesIndependentCompaniesConflict: `--sources independent and --companies are mutually exclusive`,
 } as const;
 
 export const HELP_MESSAGES = {
@@ -38,5 +38,5 @@ Global options:
                      Valid: ${validFilters.join(", ")}
   --exclude, -x      Exclude articles matching filter (can be used multiple times)
                      Valid: ${validFilters.join(", ")}
-  --sources          Source types to include: companies, community (default: both)`,
+  --sources          Source types to include: companies, independent (default: both)`,
 } as const;

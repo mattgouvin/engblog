@@ -28,9 +28,9 @@ Company blogs are tracked via the `Company` enum and `providerRegistry`.
 
 ## Adding Independent Sources
 
-Independent sources (e.g. community blogs, newsletters) are tracked separately from company blogs via the `IndependentSource` enum and `communityRegistry`.
+Independent sources (e.g. newsletters, personal blogs) are tracked separately from company blogs via the `IndependentSource` enum and `independentRegistry`.
 - `src/types/index.ts` — add entry to `IndependentSource` enum
-- `src/providers/community-registry.ts` — map the new value to a provider instance (see Source Types above); `src/providers/community-registry.ts` itself (with `LatentSpace`) serves as the reference implementation
+- `src/providers/independent-registry.ts` — map the new value to a provider instance (see Source Types above); `src/providers/independent-registry.ts` itself (with `LatentSpace`) serves as the reference implementation
 - Articles from independent sources are assigned `sourceType: "independent"` automatically by the repository layer.
 
 ## Adding Content Filters

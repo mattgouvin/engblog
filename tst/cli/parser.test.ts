@@ -35,15 +35,15 @@ describe("--sources flag", () => {
   });
 
   // Scenario: Community-only flag parses correctly
-  test("--sources community sets sources: ['community']", () => {
-    const result = parseCliArgs(argv("--sources", "community"));
-    expect(result.flags.sources).toEqual(["community"]);
+  test("--sources independent sets sources: ['independent']", () => {
+    const result = parseCliArgs(argv("--sources", "independent"));
+    expect(result.flags.sources).toEqual(["independent"]);
   });
 
   // Scenario: Both values (equivalent to default)
-  test("--sources companies community sets sources: ['companies', 'community']", () => {
-    const result = parseCliArgs(argv("--sources", "companies", "community"));
-    expect(result.flags.sources).toEqual(["companies", "community"]);
+  test("--sources companies independent sets sources: ['companies', 'independent']", () => {
+    const result = parseCliArgs(argv("--sources", "companies", "independent"));
+    expect(result.flags.sources).toEqual(["companies", "independent"]);
   });
 
   // Scenario: Invalid source type
@@ -51,7 +51,7 @@ describe("--sources flag", () => {
     expect(() => parseCliArgs(argv("--sources", "unknown"))).toThrow();
     expect(exitSpy).toHaveBeenCalledWith(1);
     expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("companies"));
-    expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("community"));
+    expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("independent"));
   });
 
   // Scenario: --sources with no values
@@ -60,10 +60,10 @@ describe("--sources flag", () => {
     expect(exitSpy).toHaveBeenCalledWith(1);
   });
 
-  // Scenario: Conflict with --companies when sources is community-only
-  test("--sources community --companies google exits 1 with mutual exclusion error", () => {
+  // Scenario: Conflict with --companies when sources is independent-only
+  test("--sources independent --companies google exits 1 with mutual exclusion error", () => {
     expect(() =>
-      parseCliArgs(argv("--sources", "community", "--companies", "google"))
+      parseCliArgs(argv("--sources", "independent", "--companies", "google"))
     ).toThrow();
     expect(exitSpy).toHaveBeenCalledWith(1);
     expect(errorSpy).toHaveBeenCalledWith(expect.stringContaining("mutually exclusive"));
@@ -77,17 +77,17 @@ describe("--sources flag", () => {
   });
 
   // Scenario: Compatible with other flags
-  test("--sources community --daysBack 7 parses correctly", () => {
-    const result = parseCliArgs(argv("--sources", "community", "--daysBack", "7"));
-    expect(result.flags.sources).toEqual(["community"]);
+  test("--sources independent --daysBack 7 parses correctly", () => {
+    const result = parseCliArgs(argv("--sources", "independent", "--daysBack", "7"));
+    expect(result.flags.sources).toEqual(["independent"]);
     expect(result.flags.startDate).toBeInstanceOf(Date);
     expect(result.flags.endDate).toBeInstanceOf(Date);
   });
 
   // Scenario: Compatible with date and content filters (full spec scenario)
-  test("--sources community --daysBack 7 --include ai parses correctly", () => {
-    const result = parseCliArgs(argv("--sources", "community", "--daysBack", "7", "--include", "ai"));
-    expect(result.flags.sources).toEqual(["community"]);
+  test("--sources independent --daysBack 7 --include ai parses correctly", () => {
+    const result = parseCliArgs(argv("--sources", "independent", "--daysBack", "7", "--include", "ai"));
+    expect(result.flags.sources).toEqual(["independent"]);
     expect(result.flags.startDate).toBeInstanceOf(Date);
     expect(result.flags.endDate).toBeInstanceOf(Date);
     expect(result.flags.includeFilters).toEqual([ContentFilterIdentifier.AI]);

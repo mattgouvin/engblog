@@ -78,7 +78,7 @@ function parseFlags(args: string[], command: string): ParsedFlags {
       let j = i + 1;
       while (j < args.length && !args[j]!.startsWith("-")) {
         const val = args[j]!;
-        if (val !== SourceType.Companies && val !== SourceType.Community) {
+        if (val !== SourceType.Companies && val !== SourceType.Independent) {
           console.error(ERROR_MESSAGES.sourcesInvalid);
           process.exit(1);
         }
@@ -145,10 +145,10 @@ function validateFlags(flags: {
   if (
     flags.sources &&
     flags.sources.length === 1 &&
-    flags.sources[0] === SourceType.Community &&
+    flags.sources[0] === SourceType.Independent &&
     flags.companies !== ALL_COMPANIES
   ) {
-    console.error(ERROR_MESSAGES.sourcesCommunityCompaniesConflict);
+    console.error(ERROR_MESSAGES.sourcesIndependentCompaniesConflict);
     process.exit(1);
   }
 
