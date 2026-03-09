@@ -72,9 +72,10 @@ New flags require:
 
 Flag processors handle validation and conversion of raw string arguments into typed values. Each processor must implement the `FlagProcessor<T>` interface.
 - `src/cli/flags/definitions.ts` — add `CliFlag` entry
-- `src/cli/flags/` — add processor implementing `FlagProcessor<T>` (see `companies.ts`, `date.ts`, `filter.ts` as reference)
-- `src/cli/parser.ts` — integrate into argument parsing
+- `src/cli/flags/` — add processor implementing `FlagProcessor<T>` (see `companies.ts`, `date.ts`, `filter.ts` as reference); simple multi-value flags like `--sources` can be parsed inline in `parser.ts` without a separate processor file
+- `src/cli/parser.ts` — integrate into argument parsing and `validateFlags`
 - `src/types/cli.ts` — `FlagProcessor<T>` and `FlagProcessorResult<T>` interfaces; update `ParsedFlags` type
+- `src/constants/` — add a constants file for new enum values (e.g. `src/constants/sources.ts` for `SourceType`); export from `src/constants/index.ts`
 - `src/cli/messages.ts` — add error messages for invalid flag values
 
 ## Swapping Data Sources

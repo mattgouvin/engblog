@@ -12,6 +12,7 @@ The system follows a layered structure where each layer has clear responsibiliti
 Defines shared enumerations and identifier lists used across layers.
 - `src/constants/commands.ts` — `CliCommand` enum (e.g. `list-articles`)
 - `src/constants/filters.ts` — `ContentFilterIdentifier` enum and `VALID_FILTERS` list
+- `src/constants/sources.ts` — `SourceType` enum (`companies`, `community`)
 - `src/constants/ai-keywords.ts` — AI/ML keyword list used by the keyword filter
 
 **CLI Layer**
@@ -48,7 +49,7 @@ Extensible system for filtering articles by content. Filters are composable and 
 
 ## Data Flow
 
-User input is parsed into structured flags, passed to a command handler, which requests data from the repository. The repository fetches from company providers and independent source providers in parallel, applies filters and sorting, then returns results. Output is formatted as JSON. The `--no-community` flag skips independent sources entirely.
+User input is parsed into structured flags, passed to a command handler, which requests data from the repository. The repository fetches from company providers and independent source providers in parallel, applies filters and sorting, then returns results. Output is formatted as JSON. The `--sources` flag filters which source types are fetched (`companies`, `community`, or both); omitting it fetches all sources.
 
 ## Design Patterns
 

@@ -3,19 +3,23 @@ import type { ArticleRepository, ArticleListFilters } from "./article-repository
 import { providerRegistry, communityRegistry, ALL_INDEPENDENT_SOURCES } from "../providers";
 import { filterRegistry } from "../filters";
 import type { ContentFilterIdentifier } from "../constants/filters";
+import { SourceType } from "../constants/sources";
 import { getCachedArticles, setCachedArticles } from "./cache";
 
 export class ProviderArticleRepository implements ArticleRepository {
   async list(filters: ArticleListFilters): Promise<Article[]> {
-    const articles = await this.fetchArticles(filters.companies, filters.noCommunity);
+    const articles = await this.fetchArticles(filters.companies, filters.sources);
     const filtered = this.filterArticles(articles, filters);
     return this.sortArticles(filtered);
   }
 
-  private async fetchArticles(companies: Company[], noCommunity?: boolean): Promise<Article[]> {
-    const independentSources = noCommunity ? [] : ALL_INDEPENDENT_SOURCES;
+  private async fetchArticles(companies: Company[], sources?: SourceType[]): Promise<Article[]> {
+    const includeCompanies = !sources || sources.includes(SourceType.Companies);
+    const includeCommunity = !sources || sources.includes(SourceType.Community);
+    const fetchCompanies = includeCompanies ? companies : [];
+    const independentSources = includeCommunity ? ALL_INDEPENDENT_SOURCES : [];
 
-    const companyPromises: Promise<Article[]>[] = companies.map(async (company): Promise<Article[]> => {
+    const companyPromises: Promise<Article[]>[] = fetchCompanies.map(async (company): Promise<Article[]> => {
       const cached = await getCachedArticles(company);
       if (cached) {
         return cached.map(article => ({ ...article, source: company, sourceType: "company" as const }));
@@ -35,7 +39,7 @@ export class ProviderArticleRepository implements ArticleRepository {
       return articles.map(article => ({ ...article, source, sourceType: "independent" as const }));
     });
 
-    const allSources = [...companies, ...independentSources];
+    const allSources = [...fetchCompanies, ...independentSources];
     const results = await Promise.allSettled([...companyPromises, ...independentPromises]);
 
     return results.flatMap((result, i) => {

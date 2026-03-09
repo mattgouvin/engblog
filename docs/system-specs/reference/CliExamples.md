@@ -25,9 +25,19 @@ Exclude AI/ML content:
 engblog list-articles -c netflix spotify -d 14 --exclude ai
 ```
 
-Fetch company blogs only, excluding independent sources:
+Fetch company blogs only:
 ```
-engblog list-articles -c google meta anthropic --daysBack 30 --no-community
+engblog list-articles --sources companies --daysBack 30
+```
+
+Fetch independent/community sources only:
+```
+engblog list-articles --sources community --daysBack 7
+```
+
+Fetch community sources with content filter:
+```
+engblog list-articles --sources community --daysBack 7 --include ai
 ```
 
 Show available options:

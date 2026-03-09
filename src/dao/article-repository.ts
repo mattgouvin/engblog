@@ -1,5 +1,6 @@
 import type { Article, Company } from "../types";
 import type { ContentFilterIdentifier } from "../constants/filters";
+import type { SourceType } from "../constants/sources";
 
 export interface ArticleListFilters {
   companies: Company[];
@@ -7,7 +8,7 @@ export interface ArticleListFilters {
   endDate?: Date;
   includeFilters: ContentFilterIdentifier[];
   excludeFilters: ContentFilterIdentifier[];
-  noCommunity?: boolean;
+  sources?: SourceType[];
 }
 
 export interface ArticleRepository {
