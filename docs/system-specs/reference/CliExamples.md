@@ -30,14 +30,14 @@ Fetch company blogs only:
 engblog list-articles --sources companies --daysBack 30
 ```
 
-Fetch independent/community sources only:
+Fetch independent sources only:
 ```
-engblog list-articles --sources community --daysBack 7
+engblog list-articles --sources independent --daysBack 7
 ```
 
-Fetch community sources with content filter:
+Fetch independent sources with content filter:
 ```
-engblog list-articles --sources community --daysBack 7 --include ai
+engblog list-articles --sources independent --daysBack 7 --include ai
 ```
 
 Show available options:

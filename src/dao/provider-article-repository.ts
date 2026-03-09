@@ -1,6 +1,6 @@
 import type { Article, Company } from "../types";
 import type { ArticleRepository, ArticleListFilters } from "./article-repository";
-import { providerRegistry, communityRegistry, ALL_INDEPENDENT_SOURCES } from "../providers";
+import { providerRegistry, independentRegistry, ALL_INDEPENDENT_SOURCES } from "../providers";
 import { filterRegistry } from "../filters";
 import type { ContentFilterIdentifier } from "../constants/filters";
 import { SourceType } from "../constants/sources";
@@ -15,9 +15,9 @@ export class ProviderArticleRepository implements ArticleRepository {
 
   private async fetchArticles(companies: Company[], sources?: SourceType[]): Promise<Article[]> {
     const includeCompanies = !sources || sources.includes(SourceType.Companies);
-    const includeCommunity = !sources || sources.includes(SourceType.Community);
+    const includeIndependent = !sources || sources.includes(SourceType.Independent);
     const fetchCompanies = includeCompanies ? companies : [];
-    const independentSources = includeCommunity ? ALL_INDEPENDENT_SOURCES : [];
+    const independentSources = includeIndependent ? ALL_INDEPENDENT_SOURCES : [];
 
     const companyPromises: Promise<Article[]>[] = fetchCompanies.map(async (company): Promise<Article[]> => {
       const cached = await getCachedArticles(company);
@@ -34,7 +34,7 @@ export class ProviderArticleRepository implements ArticleRepository {
       if (cached) {
         return cached.map(article => ({ ...article, source, sourceType: "independent" as const }));
       }
-      const articles = await communityRegistry[source].fetch();
+      const articles = await independentRegistry[source].fetch();
       await setCachedArticles(source, articles);
       return articles.map(article => ({ ...article, source, sourceType: "independent" as const }));
     });

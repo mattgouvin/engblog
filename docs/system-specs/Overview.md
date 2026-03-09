@@ -35,7 +35,7 @@ Provides a unified interface for data access regardless of the underlying data s
 Abstracts different data source types behind a common interface. Multiple provider types handle different source formats (RSS feeds, browser-rendered pages, custom APIs). Two registries map sources to providers: one for company blogs, one for independent sources.
 - `src/providers/provider.ts` — `DataProvider` interface (`fetch(): Promise<ArticleData[]>`)
 - `src/providers/company-registry.ts` — maps `Company` enum values to provider instances
-- `src/providers/community-registry.ts` — maps `IndependentSource` enum values to provider instances
+- `src/providers/independent-registry.ts` — maps `IndependentSource` enum values to provider instances
 - `src/providers/base-provider.ts` — shared base class
 - `src/providers/rss-provider.ts` — RSS feed fetching
 - `src/providers/browser-provider.ts`, `src/providers/html-provider.ts` — JS-rendered page scraping
@@ -49,7 +49,7 @@ Extensible system for filtering articles by content. Filters are composable and 
 
 ## Data Flow
 
-User input is parsed into structured flags, passed to a command handler, which requests data from the repository. The repository fetches from company providers and independent source providers in parallel, applies filters and sorting, then returns results. Output is formatted as JSON. The `--sources` flag filters which source types are fetched (`companies`, `community`, or both); omitting it fetches all sources.
+User input is parsed into structured flags, passed to a command handler, which requests data from the repository. The repository fetches from company providers and independent source providers in parallel, applies filters and sorting, then returns results. Output is formatted as JSON. The `--sources` flag filters which source types are fetched (`companies`, `independent`, or both); omitting it fetches all sources.
 
 ## Design Patterns
 
