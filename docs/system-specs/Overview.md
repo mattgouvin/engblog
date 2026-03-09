@@ -8,10 +8,16 @@ The system follows a layered structure where each layer has clear responsibiliti
 
 ## Core Layers
 
+**Constants Layer**
+Defines shared enumerations and identifier lists used across layers.
+- `src/constants/commands.ts` — `CliCommand` enum (e.g. `list-articles`)
+- `src/constants/filters.ts` — `ContentFilterIdentifier` enum and `VALID_FILTERS` list
+- `src/constants/ai-keywords.ts` — AI/ML keyword list used by the keyword filter
+
 **CLI Layer**
 Handles command-line argument parsing and validation. Converts raw string arguments into structured flags and options. Validates mutually exclusive options and ensures data integrity before passing to command handlers.
 - `src/cli/parser.ts` — main argument parser
-- `src/cli/flags/definitions.ts` — flag identifiers and short forms
+- `src/cli/flags/definitions.ts` — `CliFlag` class with static instances for each flag (long and short forms)
 - `src/cli/flags/companies.ts`, `src/cli/flags/date.ts`, `src/cli/flags/filter.ts` — per-flag processors
 
 **Command Layer**
@@ -19,14 +25,16 @@ Contains business logic for each CLI command. Currently supports listing article
 - `src/cli/handler.ts` — command handlers
 
 **Repository Layer**
-Provides a unified interface for data access regardless of the underlying data source. The current implementation uses external providers, but can be swapped for database-backed or API-backed implementations without affecting other layers. Responsible for orchestrating fetching, filtering, and sorting operations.
+Provides a unified interface for data access regardless of the underlying data source. The current implementation uses external providers, but can be swapped for database-backed or API-backed implementations without affecting other layers. Responsible for orchestrating fetching from both company and independent source registries in parallel, applying filters, and sorting.
 - `src/dao/article-repository.ts` — repository interface
 - `src/dao/provider-article-repository.ts` — provider-backed implementation
-- `src/dao/cache.ts` — per-company article cache
+- `src/dao/cache.ts` — per-source article cache (keyed by source slug string)
 
 **Provider Layer**
-Abstracts different data source types behind a common interface. Multiple provider types handle different source formats (RSS feeds, browser-rendered pages, custom APIs). Each provider knows how to fetch and parse data from its specific source type. A registry maps companies to their appropriate providers.
-- `src/providers/registry.ts` — maps companies to provider instances
+Abstracts different data source types behind a common interface. Multiple provider types handle different source formats (RSS feeds, browser-rendered pages, custom APIs). Two registries map sources to providers: one for company blogs, one for independent sources.
+- `src/providers/provider.ts` — `DataProvider` interface (`fetch(): Promise<ArticleData[]>`)
+- `src/providers/company-registry.ts` — maps `Company` enum values to provider instances
+- `src/providers/community-registry.ts` — maps `IndependentSource` enum values to provider instances
 - `src/providers/base-provider.ts` — shared base class
 - `src/providers/rss-provider.ts` — RSS feed fetching
 - `src/providers/browser-provider.ts`, `src/providers/html-provider.ts` — JS-rendered page scraping
@@ -37,15 +45,14 @@ Extensible system for filtering articles by content. Filters are composable and 
 - `src/filters/registry.ts` — maps filter identifiers to implementations
 - `src/filters/filter.ts` — filter interface
 - `src/filters/keywords.ts` — keyword-based filter implementation
-- `src/constants/ai-keywords.ts` — AI/ML keyword list
 
 ## Data Flow
 
-User input is parsed into structured flags, passed to a command handler, which requests data from the repository. The repository fetches from multiple providers in parallel, applies filters and sorting, then returns results. Output is formatted as JSON.
+User input is parsed into structured flags, passed to a command handler, which requests data from the repository. The repository fetches from company providers and independent source providers in parallel, applies filters and sorting, then returns results. Output is formatted as JSON. The `--no-community` flag skips independent sources entirely.
 
 ## Design Patterns
 
-**Registry Pattern**: Maps identifiers (companies, filter types) to their implementations, enabling easy extension without modifying core logic.
+**Registry Pattern**: Maps identifiers (`Company` enum, `IndependentSource` enum, filter types) to their implementations, enabling easy extension without modifying core logic.
 
 **Repository Pattern**: Decouples data access from business logic, allowing different storage backends while maintaining the same interface.
 
@@ -61,6 +68,6 @@ The system is designed for easy extension:
 
 ## Docs
 
-- [Functionality](./functionality.md) — supported commands, flags, and output format
-- [CLI Examples](./cli.md) — example CLI commands
-- [Extending](./extending.md) — adding companies, filters, commands, and flags
+- [List Articles](./commands/ListArticles.md) — supported flags, output format, and use cases
+- [CLI Examples](./reference/CliExamples.md) — example CLI commands
+- [Extending](./common/Extensibility.md) — adding companies, filters, commands, and flags
