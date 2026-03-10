@@ -31,6 +31,8 @@ export enum Company {
 
 export enum IndependentSource {
   LatentSpace = "latentspace",
+  LennysNewsletter = "lennysnewsletter",
+  RobinSloan = "robinsloan",
 }
 
 export interface ArticleData {
