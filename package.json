@@ -1,5 +1,5 @@
 {
-  "name": "engineering-blog-discovery",
+  "name": "engblog",
   "module": "src/index.ts",
   "type": "module",
   "private": true,
