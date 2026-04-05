@@ -33,6 +33,7 @@ export enum IndependentSource {
   LatentSpace = "latentspace",
   LennysNewsletter = "lennysnewsletter",
   RobinSloan = "robinsloan",
+  AheadOfAI = "aheadofai",
 }
 
 export interface ArticleData {
