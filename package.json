@@ -16,7 +16,7 @@
     "@eslint/js": "^10.0.1",
     "@types/bun": "latest",
     "chromium-bidi": "^15.0.0",
-    "electron": "^40.8.0",
+    "electron": "^43.4.0",
     "globals": "^17.4.0",
     "jiti": "^2.6.1",
     "playwright": "^1.58.2",
@@ -31,6 +31,8 @@
     "node-html-parser": "^7.0.2"
   },
   "eslintConfig": {
-    "ignorePatterns": ["node_modules/"]
+    "ignorePatterns": [
+      "node_modules/"
+    ]
   }
 }
