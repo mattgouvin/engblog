@@ -8,7 +8,6 @@ export enum Company {
   Ramp = "ramp",
   Anthropic = "anthropic",
   Ona = "ona",
-  Cursor = "cursor",
   YCombinator = "ycombinator",
   LangChain = "langchain",
   Asana = "asana",

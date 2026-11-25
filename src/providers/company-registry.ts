@@ -46,15 +46,6 @@ export const providerRegistry: Record<Company, DataProvider> = {
       date: ".ArticleList-module-scss-module___tpu-a__date",
     }
   ),
-  [Company.Cursor]: new BrowserProvider(
-    "https://cursor.com/blog",
-    {
-      item: 'a.card[href^="/blog/"]',
-      title: "p",
-      link: "self",
-      date: "time",
-    }
-  ),
 
   // Custom providers (complex logic)
   [Company.Asana]: new AsanaProvider(),
