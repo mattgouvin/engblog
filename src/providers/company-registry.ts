@@ -3,7 +3,6 @@ import type { DataProvider } from "./provider";
 import { RssProvider } from "./rss-provider";
 import { BrowserProvider } from "./browser-provider";
 import { AsanaProvider } from "./asana-provider";
-import { RampProvider } from "./ramp-provider";
 
 /**
  * Consolidated registry of all data providers
@@ -33,6 +32,8 @@ export const providerRegistry: Record<Company, DataProvider> = {
   [Company.Tinder]: new RssProvider("https://medium.com/feed/tinder"),
   [Company.YCombinator]: new RssProvider("https://www.ycombinator.com/blog/feed"),
   [Company.OpenAI]: new RssProvider("https://openai.com/news/rss.xml"),
+  [Company.Stripe]: new RssProvider("https://stripe.dev/blog/feed"),
+  [Company.Ramp]: new RssProvider("https://builders.ramp.com/feed.xml"),
 
   // Browser-based providers (require JavaScript rendering)
   [Company.Anthropic]: new BrowserProvider(
@@ -47,8 +48,8 @@ export const providerRegistry: Record<Company, DataProvider> = {
   [Company.Cursor]: new BrowserProvider(
     "https://cursor.com/blog",
     {
-      item: "a.card.card--text",
-      title: "p.type-base:first-of-type",
+      item: 'a.card[href^="/blog/"]',
+      title: "p",
       link: "self",
       date: "time",
     }
@@ -62,19 +63,9 @@ export const providerRegistry: Record<Company, DataProvider> = {
       date: ".grid-post__date",
     }
   ),
-  [Company.Stripe]: new BrowserProvider(
-    "https://stripe.dev/blog",
-    {
-      item: "li.ListItem_listItem__RdyDp",
-      title: "div.text-md",
-      link: "a",
-      date: "span.text-smallcaps",
-    }
-  ),
 
   // Custom providers (complex logic)
   [Company.Asana]: new AsanaProvider(),
-  [Company.Ramp]: new RampProvider(),
 };
 
 export const ALL_COMPANIES = Object.values(Company);
