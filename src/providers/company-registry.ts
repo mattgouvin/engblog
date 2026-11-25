@@ -1,7 +1,6 @@
 import { Company } from "../types";
 import type { DataProvider } from "./provider";
 import { RssProvider } from "./rss-provider";
-import { BrowserProvider } from "./browser-provider";
 import { AsanaProvider } from "./asana-provider";
 
 /**
@@ -9,7 +8,7 @@ import { AsanaProvider } from "./asana-provider";
  * Add new companies here instead of creating separate files
  */
 export const providerRegistry: Record<Company, DataProvider> = {
-  // RSS-based providers
+  /** RSS-based providers */
   [Company.Airbnb]: new RssProvider("https://medium.com/feed/airbnb-engineering"),
   [Company.Atlassian]: new RssProvider("https://atlassianblog.wpengine.com/feed"),
   [Company.Canva]: new RssProvider("https://www.canva.dev/blog/engineering/feed.xml"),
@@ -36,27 +35,15 @@ export const providerRegistry: Record<Company, DataProvider> = {
   [Company.Ramp]: new RssProvider("https://builders.ramp.com/feed.xml"),
   [Company.LinkedIn]: new RssProvider("https://www.linkedin.com/blog.rss"),
 
-  // Browser-based providers (require JavaScript rendering)
-  [Company.Anthropic]: new BrowserProvider(
-    "https://www.anthropic.com/engineering",
-    {
-      item: "a.ArticleList-module-scss-module___tpu-a__cardLink",
-      title: "h2, h3",
-      link: "self",
-      date: ".ArticleList-module-scss-module___tpu-a__date",
-    }
+  /** Community feeds: official feeds are missing or stale. See README "Sources". */
+  [Company.Anthropic]: new RssProvider(
+    "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_anthropic_engineering.xml"
   ),
-  [Company.Cursor]: new BrowserProvider(
-    "https://cursor.com/blog",
-    {
-      item: 'a.card[href^="/blog/"]',
-      title: "p",
-      link: "self",
-      date: "time",
-    }
+  [Company.Cursor]: new RssProvider(
+    "https://raw.githubusercontent.com/Olshansk/rss-feeds/main/feeds/feed_cursor.xml"
   ),
 
-  // Custom providers (complex logic)
+  /** Custom providers (complex logic) */
   [Company.Asana]: new AsanaProvider(),
 };
 
