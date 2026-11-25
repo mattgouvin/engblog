@@ -39,7 +39,7 @@ Abstracts different data source types behind a common interface. Multiple provid
 - `src/providers/base-provider.ts` — shared base class
 - `src/providers/rss-provider.ts` — RSS feed fetching
 - `src/providers/browser-provider.ts`, `src/providers/html-provider.ts` — JS-rendered page scraping
-- `src/providers/asana-provider.ts`, `src/providers/ramp-provider.ts` — custom providers
+- `src/providers/asana-provider.ts` — custom provider
 
 **Filter Layer**
 Extensible system for filtering articles by content. Filters are composable and can be applied as include or exclude operations. Currently supports keyword-based filtering with the ability to add custom filter types.

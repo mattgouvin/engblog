@@ -16,7 +16,7 @@ For sites requiring JavaScript execution, use a browser provider with CSS select
 **Custom Sources**
 When standard providers don't fit, create a custom provider implementing the base interface. Custom providers handle unique parsing requirements or complex API interactions.
 - `src/providers/base-provider.ts` — base class to extend
-- `src/providers/asana-provider.ts`, `src/providers/ramp-provider.ts` — reference implementations
+- `src/providers/asana-provider.ts` — reference implementation
 
 Note: Providers fetch article data without source context. The repository layer assigns `source` and `sourceType` automatically when data is retrieved.
 
