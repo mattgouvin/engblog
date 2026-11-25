@@ -34,6 +34,7 @@ export const providerRegistry: Record<Company, DataProvider> = {
   [Company.OpenAI]: new RssProvider("https://openai.com/news/rss.xml"),
   [Company.Stripe]: new RssProvider("https://stripe.dev/blog/feed"),
   [Company.Ramp]: new RssProvider("https://builders.ramp.com/feed.xml"),
+  [Company.LinkedIn]: new RssProvider("https://www.linkedin.com/blog.rss"),
 
   // Browser-based providers (require JavaScript rendering)
   [Company.Anthropic]: new BrowserProvider(
@@ -52,15 +53,6 @@ export const providerRegistry: Record<Company, DataProvider> = {
       title: "p",
       link: "self",
       date: "time",
-    }
-  ),
-  [Company.LinkedIn]: new BrowserProvider(
-    "https://www.linkedin.com/blog/engineering",
-    {
-      item: "li.post-list__item.grid-post",
-      title: ".grid-post__title a",
-      link: ".grid-post__title a",
-      date: ".grid-post__date",
     }
   ),
 
