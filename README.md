@@ -5,9 +5,11 @@ CLI tool for discovering and filtering engineering blog articles from tech compa
 ## Quick Start
 
 ```bash
-bun install
-bun src/index.ts list-articles --companies google meta --daysBack 7
+make install
+make run ARGS="--companies google meta --daysBack 7"
 ```
+
+Run `make` to list all targets. Run `make check` (lint, typecheck, and test) before opening a PR.
 
 
 ## Sources
