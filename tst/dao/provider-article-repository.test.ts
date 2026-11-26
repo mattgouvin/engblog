@@ -30,6 +30,7 @@ mock.module("../../src/dao/cache", () => ({
 
 import { ProviderArticleRepository } from "../../src/dao/provider-article-repository";
 import { ContentFilterIdentifier } from "../../src/constants/filters";
+import { SourceType } from "../../src/constants/sources";
 
 const repo = new ProviderArticleRepository();
 
@@ -50,7 +51,7 @@ describe("ProviderArticleRepository sources filtering", () => {
 
   // Scenario: Community-only results
   test("sources: ['community'] returns only independent articles", async () => {
-    const articles = await repo.list({ ...BASE_FILTERS, sources: ["independent"] });
+    const articles = await repo.list({ ...BASE_FILTERS, sources: [SourceType.Independent] });
     expect(articles.length).toBeGreaterThan(0);
     expect(articles.every((a) => a.sourceType === "independent")).toBe(true);
     expect(articles.some((a) => a.sourceType === "company")).toBe(false);
@@ -58,7 +59,7 @@ describe("ProviderArticleRepository sources filtering", () => {
 
   // Scenario: Companies-only results
   test("sources: ['companies'] returns only company articles", async () => {
-    const articles = await repo.list({ ...BASE_FILTERS, sources: ["companies"] });
+    const articles = await repo.list({ ...BASE_FILTERS, sources: [SourceType.Companies] });
     expect(articles.length).toBeGreaterThan(0);
     expect(articles.every((a) => a.sourceType === "company")).toBe(true);
     expect(articles.some((a) => a.sourceType === "independent")).toBe(false);
@@ -66,7 +67,7 @@ describe("ProviderArticleRepository sources filtering", () => {
 
   // Scenario: Both sources (equivalent to default)
   test("sources: ['companies', 'community'] returns both company and independent articles", async () => {
-    const articles = await repo.list({ ...BASE_FILTERS, sources: ["companies", "independent"] });
+    const articles = await repo.list({ ...BASE_FILTERS, sources: [SourceType.Companies, SourceType.Independent] });
     const types = articles.map((a) => a.sourceType);
     expect(types).toContain("company");
     expect(types).toContain("independent");
@@ -79,7 +80,7 @@ describe("ProviderArticleRepository sources filtering", () => {
 
     const articles = await repo.list({
       ...BASE_FILTERS,
-      sources: ["independent"],
+      sources: [SourceType.Independent],
       startDate,
       endDate,
       includeFilters: [ContentFilterIdentifier.AI],

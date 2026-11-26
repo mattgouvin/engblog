@@ -2,6 +2,8 @@ import { describe, test, expect, beforeEach, afterEach, spyOn } from "bun:test";
 import type { Mock } from "bun:test";
 import { parseCliArgs } from "../../src/cli/parser";
 import { ContentFilterIdentifier } from "../../src/constants/filters";
+import { SourceType } from "../../src/constants/sources";
+import { Company } from "../../src/types";
 
 // argv structure: [node, script, command, ...flags]
 const argv = (...flags: string[]) => ["bun", "engblog", "list-articles", ...flags];
@@ -31,19 +33,19 @@ describe("--sources flag", () => {
   // Scenario: Companies-only flag parses correctly
   test("--sources companies sets sources: ['companies']", () => {
     const result = parseCliArgs(argv("--sources", "companies"));
-    expect(result.flags.sources).toEqual(["companies"]);
+    expect(result.flags.sources).toEqual([SourceType.Companies]);
   });
 
   // Scenario: Community-only flag parses correctly
   test("--sources independent sets sources: ['independent']", () => {
     const result = parseCliArgs(argv("--sources", "independent"));
-    expect(result.flags.sources).toEqual(["independent"]);
+    expect(result.flags.sources).toEqual([SourceType.Independent]);
   });
 
   // Scenario: Both values (equivalent to default)
   test("--sources companies independent sets sources: ['companies', 'independent']", () => {
     const result = parseCliArgs(argv("--sources", "companies", "independent"));
-    expect(result.flags.sources).toEqual(["companies", "independent"]);
+    expect(result.flags.sources).toEqual([SourceType.Companies, SourceType.Independent]);
   });
 
   // Scenario: Invalid source type
@@ -72,14 +74,14 @@ describe("--sources flag", () => {
   // Scenario: --sources companies + --companies is allowed
   test("--sources companies --companies google is valid", () => {
     const result = parseCliArgs(argv("--sources", "companies", "--companies", "google"));
-    expect(result.flags.sources).toEqual(["companies"]);
-    expect(result.flags.companies).toEqual(["google"]);
+    expect(result.flags.sources).toEqual([SourceType.Companies]);
+    expect(result.flags.companies).toEqual([Company.Google]);
   });
 
   // Scenario: Compatible with other flags
   test("--sources independent --daysBack 7 parses correctly", () => {
     const result = parseCliArgs(argv("--sources", "independent", "--daysBack", "7"));
-    expect(result.flags.sources).toEqual(["independent"]);
+    expect(result.flags.sources).toEqual([SourceType.Independent]);
     expect(result.flags.startDate).toBeInstanceOf(Date);
     expect(result.flags.endDate).toBeInstanceOf(Date);
   });
@@ -87,7 +89,7 @@ describe("--sources flag", () => {
   // Scenario: Compatible with date and content filters (full spec scenario)
   test("--sources independent --daysBack 7 --include ai parses correctly", () => {
     const result = parseCliArgs(argv("--sources", "independent", "--daysBack", "7", "--include", "ai"));
-    expect(result.flags.sources).toEqual(["independent"]);
+    expect(result.flags.sources).toEqual([SourceType.Independent]);
     expect(result.flags.startDate).toBeInstanceOf(Date);
     expect(result.flags.endDate).toBeInstanceOf(Date);
     expect(result.flags.includeFilters).toEqual([ContentFilterIdentifier.AI]);
