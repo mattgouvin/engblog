@@ -1,5 +1,5 @@
 import type { Company } from "../types";
-import type { ContentFilterIdentifier } from "./filters";
+import type { ContentFilterIdentifier } from "../constants/filters";
 
 export const ERROR_MESSAGES = {
   unknownCommand: (cmd: string) => `Unknown command: ${cmd}`,
