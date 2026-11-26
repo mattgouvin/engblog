@@ -7,9 +7,6 @@
     "engblog": "src/index.ts"
   },
   "scripts": {
-    "clean": "rm -rf dist build node_modules",
-    "lint": "eslint src tst",
-    "build": "bun run clean && bun install && bun run lint && bun build ./src/index.ts --outdir ./build --target=node",
     "list-articles": "bun run src/index.ts"
   },
   "devDependencies": {
